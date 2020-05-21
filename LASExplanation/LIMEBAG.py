@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import lime.lime_tabular
-import subprocess
+import LASExplanation.sk as sk
 
 
 
@@ -31,33 +31,35 @@ class LIMEBAG():
 
     def _check(self):
         n_fea = self.X_train.shape[1]
-        explainer = lime.lime_tabular.LimeTabularExplainer(training_data=self.X_train, training_labels=self.y_train,
+        explainer = lime.lime_tabular.LimeTabularExplainer(training_data=self.X_train.values, training_labels=self.y_train,
                                                            feature_names=self.X_train.columns,
                                                            discretizer='entropy', feature_selection='lasso_path',
                                                            mode='classification')
         counter = 0
         rank = []
         rankval = []
-        for i in range(self.X_test.shape[0]):
+        total = self.X_test.shape[0]
+        for i in range(total):
             ins = explainer.explain_instance(data_row=pd.to_numeric(self.X_test.values[i]),
                                              predict_fn=self.clf.predict_proba, num_features=n_fea, num_samples=5000)
             ind = ins.local_exp[1]
             fair = True
             for j in range(self.K):
-                if ind[j][0] in self.sensitive:
+                if self.sensitive and ind[j][0] in self.sensitive:
                     counter += 1
-                    print("Unfair!", self.X_test.columns[ind[j][0]], ind[j][0])
+                    print('['+str(i)+'/'+str(total)+']',"Unfair!", self.X_test.columns[ind[j][0]], ind[j][0])
                     print('   ', [each[0] for each in ind])
                     fair = False
                     break
             if fair:
-                print('Fair!')
+                print('['+str(i)+'/'+str(total)+']','Fair!')
                 print('   ', [each[0] for each in ind])
             temp = [each[0] for each in ind]
             temp2 = [each[1] for each in ind]
             rank.append(temp)
             rankval.append(temp2)
         return counter, rank, rankval
+
     def explain(self):
         cnt, cache, cache2 = self._check()
         size = len(cache)
@@ -70,21 +72,33 @@ class LIMEBAG():
                 ranks[col].append(j)
                 rankvals[col].append(np.abs(cache2[i][j]))
         print("Number of unfair instances:", cnt,"out of all",self.X_test.shape[0],"instances")
+        return ranks, rankvals
+
+    def find_rank(self,ranks,rankvals,type = 'values',higher=False,latex=False):
         cols = self.X_test.columns
-
-        f = open("lime_rank" + ".txt", "w")
-        for j in range(col_len):
-            f.write(cols[j] + '\n')
-            for each in ranks[j]:
-                f.write("%f" % each + ' ')
-            f.write('\n')
-        f.close()
-
-        f = open("lime_val" + ".txt", "w")
-        for j in range(col_len):
-            f.write(cols[j] + '\n')
-            for each in rankvals[j]:
-                f.write("%f" % each + ' ')
-            f.write('\n')
-        f.close()
-
+        col_len = len(cols)
+        if type == 'ranks':
+            f = open("lime_rank" + ".txt", "w")
+            for j in range(col_len):
+                f.write(cols[j] + '\n')
+                for each in ranks[j]:
+                    f.write("%f" % each + ' ')
+                if j!=col_len-1:
+                    f.write('\n')
+            f.close()
+            f1=open('lime_rank.txt', 'r')
+            sk.main(file=f1,higher=higher,latex=latex)
+        elif type =='values':
+            f = open("lime_val" + ".txt", "w")
+            for j in range(col_len):
+                f.write(cols[j] + '\n')
+                for each in rankvals[j]:
+                    f.write("%f" % np.round(np.abs(each),4) + ' ')
+                if j != col_len - 1:
+                    f.write('\n')
+            f.close()
+            f1 = open('lime_val.txt', 'r')
+            sk.main(file=f1,higher=higher,latex=latex)
+        else:
+            raise ValueError("Expected type to be either values or ranks.")
+        return 0
