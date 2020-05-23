@@ -13,6 +13,8 @@ class LIMEBAG():
         self.X_test = X_test
         self.sensitive = sensitive
         self.K=K
+        self.ranks=None
+        self.rankvals=None
 
         """
         clf: fitted scikit-learn classifier
@@ -28,6 +30,22 @@ class LIMEBAG():
         K: int
            For each instance in X_test's explanation, if any sensitive feature is among the top-K features, send an alert
         """
+
+        if not isinstance(X_train, pd.DataFrame):
+            raise ValueError("X_train must be a dataframe")
+        if not isinstance(X_test, pd.DataFrame):
+            raise ValueError("X_test must be a dataframe")
+        if isinstance(y_train, pd.DataFrame) or list(y_train):
+            pass
+        else:
+            raise ValueError("y_train must be an series or a dataframe")
+        if sensitive and (not isinstance(sensitive, list)) :
+            raise ValueError("Sensitive must be either a 1-d array or left as none")
+        if (not isinstance(K, int)) or K<0:
+            raise ValueError("K must be a non-negative integer")
+        elif K>X_train.shape[1]:
+            raise ValueError("K cannot be greater than the dimension of attributes")
+
 
     def _check(self):
         n_fea = self.X_train.shape[1]
@@ -72,16 +90,19 @@ class LIMEBAG():
                 ranks[col].append(j)
                 rankvals[col].append(np.abs(cache2[i][j]))
         print("Number of unfair instances:", cnt,"out of all",self.X_test.shape[0],"instances")
+        self.ranks,self.rankvals = ranks,rankvals
         return ranks, rankvals
 
-    def find_rank(self,ranks,rankvals,type = 'values',higher=False,latex=False):
+    def find_rank(self,type = 'values',higher=False,latex=False):
+        if (not self.rankvals) or (not self.ranks):
+            raise ValueError("Must call the explain() function first")
         cols = self.X_test.columns
         col_len = len(cols)
         if type == 'ranks':
             f = open("lime_rank" + ".txt", "w")
             for j in range(col_len):
                 f.write(cols[j] + '\n')
-                for each in ranks[j]:
+                for each in self.ranks[j]:
                     f.write("%f" % each + ' ')
                 if j!=col_len-1:
                     f.write('\n')
@@ -92,7 +113,7 @@ class LIMEBAG():
             f = open("lime_val" + ".txt", "w")
             for j in range(col_len):
                 f.write(cols[j] + '\n')
-                for each in rankvals[j]:
+                for each in self.rankvals[j]:
                     f.write("%f" % np.round(np.abs(each),4) + ' ')
                 if j != col_len - 1:
                     f.write('\n')

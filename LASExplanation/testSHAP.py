@@ -18,7 +18,7 @@ def main():
             df.iloc[i, -1] = 0
     X=df.iloc[:,:-1]
     y=df.iloc[:,-1]
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.05)
     sc = MinMaxScaler()
     X_train = pd.DataFrame(sc.fit_transform(X_train), columns=X_train.columns).copy()
     X_test = pd.DataFrame(sc.fit_transform(X_test), columns=X_train.columns).copy()
@@ -34,7 +34,7 @@ def main():
     for i in range(len(X_train.columns)):
         print('Index',i,':',X_train.columns[i])
     shap_values = shap.explain()
-    shap.summary_plot(shap_values,X_test)
+    shap.summary_plot()
     return True
 
 
