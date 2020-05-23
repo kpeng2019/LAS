@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import lime.lime_tabular
-import LASExplanation.sk as sk
+import sk as sk
 
 
 

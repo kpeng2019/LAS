@@ -1,13 +1,16 @@
-from LASExplanation.LIMEBAG import *
+from LIMEBAG import *
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
+import pandas as pd
+import os
 """
 rq1) Can LIME be used to give summarized explanations on a group of individuals? 
 """
 
 def main():
-    df = pd.read_csv('camel-1.2.csv')
+    file = os.path.join(os.getcwd(), 'camel-1.2.csv')
+    df = pd.read_csv(os.path.normpath(file))
     # demo using a software defect prediction dataset
     for i in range(0, df.shape[0]):
         if df.iloc[i, -1] > 0:
@@ -31,6 +34,7 @@ def main():
     print(ranks)
     print("Feature importance weights of all test data returned by LIMEBAG:")
     print(rankvals)
+    return
 
 if __name__ == "__main__":
     main()

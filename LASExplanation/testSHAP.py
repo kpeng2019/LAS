@@ -1,15 +1,15 @@
 import subprocess
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from LASExplanation.SHAP import *
+from SHAP import *
 import os
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import MinMaxScaler
 
 
 def main():
-    file = os.path.join('LASExplanation','camel-1.2.csv')
-    df = pd.read_csv('camel-1.2.csv')
+    file = os.path.join(os.getcwd(), 'camel-1.2.csv')
+    df = pd.read_csv(file)
     # demo using a software defect prediction dataset
     for i in range(0, df.shape[0]):
         if df.iloc[i, -1] > 0:

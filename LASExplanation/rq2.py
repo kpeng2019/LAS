@@ -1,13 +1,16 @@
-from LASExplanation.LIMEBAG import *
+from LIMEBAG import *
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
+import pandas as pd
+import os
 """
 rq2)In what forms does this package present group-wise explanations?
 """
 
 def main():
-    df = pd.read_csv('camel-1.2.csv')
+    file = os.path.join(os.getcwd(), 'camel-1.2.csv')
+    df = pd.read_csv(file)
     # demo using a software defect prediction dataset
     for i in range(0, df.shape[0]):
         if df.iloc[i, -1] > 0:
@@ -31,6 +34,7 @@ def main():
     bag.find_rank(type='values', higher=True, latex=True)
     print('*' * 10, "Summary of feature importance ranks", '*' * 10)
     bag.find_rank(type='ranks', latex=True)
+    return
 
 
 if __name__ == "__main__":
