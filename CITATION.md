@@ -1,5 +1,5 @@
 If you redistribute LASExplanation, please follow the terms established in
-[the license](../LICENSE). If you wish to cite LASExplanation in an academic
+[the license](/LICENSE). If you wish to cite LASExplanation in an academic
 publication, please use the following reference:
 
 Formatted:
