@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import lime.lime_tabular
-import sk as sk
+import LASExplanation.sk as sk
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
@@ -9,7 +9,7 @@ import pandas as pd
 import os
 
 
-class LIMEBAG():
+class LIMEBAG(object):
     def __init__(self,clf, X_train, y_train,X_test,sensitive=None,K=1):
         self.clf=clf
         self.X_train = X_train
@@ -128,7 +128,8 @@ class LIMEBAG():
             raise ValueError("Expected type to be either values or ranks.")
         return True
 
-    def __demo1__(self):
+    @staticmethod
+    def demo1():
         file = os.path.join(os.getcwd(), 'camel-1.2.csv')
         df = pd.read_csv(os.path.normpath(file))
         # demo using a software defect prediction dataset
@@ -156,7 +157,8 @@ class LIMEBAG():
         print(rankvals)
         return True
 
-    def __demo2__(self):
+    @staticmethod
+    def demo2(self):
         file = os.path.join(os.getcwd(), 'camel-1.2.csv')
         df = pd.read_csv(file)
         # demo using a software defect prediction dataset

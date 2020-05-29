@@ -3,7 +3,7 @@ import shap
 import pandas as pd
 warnings.filterwarnings('ignore')
 
-class SHAP():
+class SHAP(object):
     def __init__(self, clf, X_train, X_test, n_cluster = 10):
         self.clf = clf
         self.X_train = X_train
