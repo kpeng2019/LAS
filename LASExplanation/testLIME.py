@@ -1,7 +1,7 @@
 import subprocess
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from LIMEBAG import *
+from LASExplanation.LIMEBAG import *
 import os
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import MinMaxScaler
