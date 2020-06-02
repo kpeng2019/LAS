@@ -9,7 +9,8 @@ rq2)In what forms does this package present group-wise explanations?
 """
 
 def main():
-    file = os.path.join(os.getcwd(), 'camel-1.2.csv')
+    #file = os.path.join(os.getcwd(), 'camel-1.2.csv')
+    file = pkg_resources.resource_filename('LASExplanation', 'camel-1.2.csv')
     df = pd.read_csv(file)
     # demo using a software defect prediction dataset
     for i in range(0, df.shape[0]):

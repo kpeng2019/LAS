@@ -7,6 +7,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import train_test_split
 import pandas as pd
 import os
+import pkg_resources
 
 
 class LIMEBAG(object):
@@ -130,7 +131,8 @@ class LIMEBAG(object):
 
 
 def demo1():
-    file = os.path.join(os.getcwd(), 'camel-1.2.csv')
+    #file = os.path.join(os.getcwd(), 'camel-1.2.csv')
+    file = pkg_resources.resource_filename('LASExplanation', 'camel-1.2.csv')
     df = pd.read_csv(os.path.normpath(file))
     # demo using a software defect prediction dataset
     for i in range(0, df.shape[0]):
@@ -158,8 +160,9 @@ def demo1():
     return True
 
 
-def demo2(self):
-    file = os.path.join(os.getcwd(), 'camel-1.2.csv')
+def demo2():
+    #file = os.path.join(os.getcwd(), 'camel-1.2.csv')
+    file = pkg_resources.resource_filename('LASExplanation', 'camel-1.2.csv')
     df = pd.read_csv(file)
     # demo using a software defect prediction dataset
     for i in range(0, df.shape[0]):
