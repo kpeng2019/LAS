@@ -1,5 +1,14 @@
-# Installing from source distribution
-python setup.py install
 
-# Installing using pip
-pip install LASExplanation
+
+# Installing
+
+## Using pip
+
+```
+sudo pip3 install LASExplanation --extra-index-url=https://test.pypi.org/simple/
+```
+
+## How to test the installation
+
+```
+```
