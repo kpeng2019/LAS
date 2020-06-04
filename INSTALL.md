@@ -19,7 +19,7 @@ python
 
 ## How to interpret the demo result
 ### Demo1()
-```
-The function first prints out attributes of the data explained. 
-The index of each attribute will be used to report feature importance rank of each instance as seen below.
-```
+ 
+- The function first prints out attributes of the data explained. 
+- The index of each attribute will be used to report feature importance rank of each instance as seen below.
+ 
