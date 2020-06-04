@@ -32,5 +32,3 @@ python
 - Demo2() repeats the first 3 steps of demo1().
 - Then it visualized the feature importance ranks&weights using scott-knott, an effect size test. The medians and IQRs of the 2 values are shown in the text, as well as the ranks determined by scott-knott. Rank 1 marks the most impotance feature(s). 
 - A latex-version table is also generated in case it's needed in research study.
-
-
